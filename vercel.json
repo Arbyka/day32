@@ -9,7 +9,7 @@
     "routes": [
       {
         "src": "/api/users",
-        "dest": "main"
+        "dest": "main.Handler"
       }
     ]
   }

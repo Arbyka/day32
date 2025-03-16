@@ -7,7 +7,7 @@ import (
 )
 
 // User struct
- type User struct {
+type User struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
 }
@@ -18,18 +18,20 @@ var (
 	nextID = 3
 )
 
+// getUsers handles GET /api/users
 func getUsers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(users)
 }
 
+// addUser handles POST /api/users
 func addUser(w http.ResponseWriter, r *http.Request) {
 	var newUser User
 	if err := json.NewDecoder(r.Body).Decode(&newUser); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	
+
 	mu.Lock()
 	newUser.ID = nextID
 	nextID++
@@ -41,16 +43,14 @@ func addUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(newUser)
 }
 
-func main() {
-	http.HandleFunc("/api/users", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodGet {
-			getUsers(w, r)
-		} else if r.Method == http.MethodPost {
-			addUser(w, r)
-		} else {
-			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
-		}
-	})
-
-	http.ListenAndServe(":3000", nil)
+// Exported function for Vercel
+func Handler(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		getUsers(w, r)
+	case http.MethodPost:
+		addUser(w, r)
+	default:
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+	}
 }
