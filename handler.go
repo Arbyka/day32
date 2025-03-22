@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-// Struktur User
+// Struktur data pengguna
 type User struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
@@ -18,13 +18,13 @@ var (
 	nextID = 3
 )
 
-// GET: Mengembalikan daftar pengguna
+// Handler GET /api/users
 func getUsers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(users)
 }
 
-// POST: Menambahkan pengguna baru
+// Handler POST /api/users
 func addUser(w http.ResponseWriter, r *http.Request) {
 	var newUser User
 	if err := json.NewDecoder(r.Body).Decode(&newUser); err != nil {
@@ -43,7 +43,7 @@ func addUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(newUser)
 }
 
-// Handler utama untuk menangani request
+// Fungsi Handler untuk Vercel
 func Handler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:

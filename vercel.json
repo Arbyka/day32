@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "handler/handler.go",
+      "src": "handler.go",
       "use": "@vercel/go"
     }
   ],
