@@ -1,5 +1,11 @@
 {
   "version": 2,
+  "builds": [
+    {
+      "src": "handler/handler.go",
+      "use": "@vercel/go"
+    }
+  ],
   "routes": [
     {
       "src": "/api/users",
